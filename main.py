@@ -6,12 +6,16 @@ from openai import AsyncOpenAI
 from aiogram import Bot, Dispatcher, types
 from aiogram.client.default import DefaultBotProperties
 from aiogram.filters import CommandStart
+from httpx import AsyncClient
 
 load_dotenv()
 
 
-
-client = AsyncOpenAI()
+if os.environ.get('PROXY'):
+    http_client = AsyncClient(proxy=os.environ['PROXY'])
+    client = AsyncOpenAI(http_client=http_client)
+else:
+    client = AsyncOpenAI()
 
 bot = Bot(os.environ["BOT_TOKEN"], default=(DefaultBotProperties(parse_mode='HTML')))
 dp = Dispatcher()
