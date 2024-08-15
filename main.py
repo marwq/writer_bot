@@ -30,6 +30,7 @@ async def _(m: types.Message):
 
 @dp.message()
 async def _(m: types.Message):
+    msg = await m.answer('One moment...')
     completion = await client.chat.completions.create(
         model="gpt-4o",
         messages=[
@@ -43,6 +44,6 @@ async def _(m: types.Message):
             },
         ]
     )
-    await m.answer(completion.choices[0].message.content)
+    await msg.edit_text(completion.choices[0].message.content)
 
 asyncio.run(dp.start_polling(bot))
